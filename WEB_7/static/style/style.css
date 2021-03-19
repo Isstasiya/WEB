@@ -1,0 +1,9 @@
+h1{
+    color: red;
+}
+.form{
+    background-color: darksalmon;
+    border: 2px;
+    border-color: black;
+    width: 40%;
+}
