@@ -1,0 +1,9 @@
+h4{
+    color:cadetblue;
+    padding: 20px;
+}
+h2.avar{
+    background: url(/static/img/MARS-2-7.png);
+    background-repeat: no-repeat;
+    padding-left: 12%;
+}

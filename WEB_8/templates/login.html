@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class='avar'>{{ title }}</h2>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.astro_id.label }}<br>
+            {{ form.astro_id(class="form-control") }}<br>
+            {% for error in form.astro_id.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.astro_ps.label }}<br>
+            {{ form.astro_ps(class="form-control", type="password") }}<br>
+            {% for error in form.astro_ps.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.comm_id.label }}<br>
+            {{ form.comm_id(class="form-control") }}<br>
+            {% for error in form.comm_id.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>
+            {{ form.comm_ps.label }}<br>
+            {{ form.comm_ps(class="form-control", type="password") }}<br>
+            {% for error in form.comm_ps.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        </p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+{% endblock %}
