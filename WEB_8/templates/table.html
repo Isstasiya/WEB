@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <h2>Оформление каюты</h2>
+    <table width="50%">
+        <tr style="background-color: #979797;">
+            <td style="width: 50%;">Цвет стен</td>
+            <td>Эмблема</td>
+        </tr>
+        <tr>
+        {% if s == 'female' and a < 18 %}
+            <td bgcolor="#EFD3D7"></td>
+            <td  style="width: 50%;"><img width="100%" src="https://toppng.com/uploads/preview/alien-11569184267p2msug4trj.png"></td>
+        {% elif s == 'female' and a >= 18 %}
+            <td bgcolor='#CBC0D3'></td>
+            <td style="width: 50%;"><img width="100%" src="https://lh3.googleusercontent.com/proxy/LgkEnaYi-CGGnNeEoN-KM6Q7wpdecR9C1KAa8KRxYG95icWD5v7wYK9-Gfm-7NOLhEpKhlZXX5dVjBe3xYFYjo6jkosCLei1-gAcDT--oqVtlg4n4NRMTV2OQWs"></td>
+        {% elif s == 'male' and a < 18 %}
+            <td bgcolor='#90E0EF'></td>
+            <td style="width: 50%"><img width="100%" src="https://toppng.com/uploads/preview/alien-11569184267p2msug4trj.png"></td>
+        {% else %}
+            <td bgcolor='#0077B6'></td>
+            <td style="width: 50%;"><img width="100%" src="https://lh3.googleusercontent.com/proxy/LgkEnaYi-CGGnNeEoN-KM6Q7wpdecR9C1KAa8KRxYG95icWD5v7wYK9-Gfm-7NOLhEpKhlZXX5dVjBe3xYFYjo6jkosCLei1-gAcDT--oqVtlg4n4NRMTV2OQWs"></td>
+        {% endif %}
+        </tr>
+    </table>
+{% endblock %}
