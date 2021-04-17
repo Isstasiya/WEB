@@ -6,10 +6,12 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from data import db_session
 from data.jobs import Jobs
 from data.users import User
+from data.departments import Department
 from forms.login import LoginForm
 from forms.add_job import AddForm
 from forms.login import LoginForm
 from forms.user import RegisterForm
+from forms.add_department import AddDepForm
 
 db_session.global_init("db/mars_explorer.sqlite")
 app = Flask(__name__)
@@ -33,6 +35,12 @@ def index():
     db_sess = db_session.create_session()
     j = db_sess.query(Jobs).all()
     return render_template("works.html", j=j)
+
+@app.route("/departments")
+def depart():
+    db_sess = db_session.create_session()
+    j = db_sess.query(Department).all()
+    return render_template("departments.html", j=j)
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
@@ -127,13 +135,63 @@ def changej(id):
 @login_required
 def deletej(id):
     db_sess = db_session.create_session()
-    jb = db_sess.query(Jobs).filter(Jobs.id == id, Jobs.team_leader == current_user.id).first()
+    jb = db_sess.query(Jobs).filter(Jobs.id == id, ((Jobs.team_leader == current_user.id) | (current_user.id == 1))).first()
     if jb:
         db_sess.delete(jb)
         db_sess.commit()
     else:
         abort(404)
     return redirect('/')
+
+@app.route('/add_department', methods=['GET', 'POST'])
+def addep():
+    form = AddDepForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        dp = Department(
+            title=form.title.data,
+            chief=form.chief.data,
+            members=form.members.data,
+            email=form.email.data
+        )
+        db_sess.add(dp)
+        db_sess.commit()
+        return redirect('/departments')
+    return render_template('add_departments.html', title='Adding a department', form=form)
+
+@app.route('/change_department/<int:id>', methods=['GET', 'POST'])
+def changeep(id):
+    form = AddDepForm()
+    db_sess = db_session.create_session()
+    dp = db_sess.query(Department).filter(Department.id == id, ((Department.chief == current_user.id) | (current_user.id == 1))).first()
+    if request.method == "GET":
+        if dp:
+            form.title.data=dp.title
+            form.chief.data=dp.chief
+            form.members.data=dp.members
+            form.email.data=dp.email
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        dp.title=form.title.data
+        dp.chief=form.chief.data
+        dp.members=form.members.data
+        dp.email=form.email.data
+        db_sess.commit()
+        return redirect('/departments')
+    return render_template('add_departments.html', title='Changing a department', form=form)
+
+@app.route('/delete_department/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deleteep(id):
+    db_sess = db_session.create_session()
+    dp = db_sess.query(Department).filter(Department.id == id, ((Department.chief == current_user.id) | (current_user.id == 1))).first()
+    if dp:
+        db_sess.delete(dp)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/departments')
 
 if __name__ == '__main__':
     app.run(port=5000, host='127.0.0.1')
