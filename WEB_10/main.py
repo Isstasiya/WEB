@@ -7,11 +7,13 @@ from data import db_session
 from data.jobs import Jobs
 from data.users import User
 from data.departments import Department
+from data.category import Category
 from forms.login import LoginForm
 from forms.add_job import AddForm
 from forms.login import LoginForm
 from forms.user import RegisterForm
 from forms.add_department import AddDepForm
+from forms.add_category import AddCatForm
 
 db_session.global_init("db/mars_explorer.sqlite")
 app = Flask(__name__)
@@ -41,6 +43,12 @@ def depart():
     db_sess = db_session.create_session()
     j = db_sess.query(Department).all()
     return render_template("departments.html", j=j)
+
+@app.route("/categories")
+def categ():
+    db_sess = db_session.create_session()
+    j = db_sess.query(Category).all()
+    return render_template("categories.html", j=j)
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
@@ -100,6 +108,7 @@ def addj():
             work_size=form.work_size.data,
             collaborators=form.collaborators.data,
             team_leader=form.team_leader.data,
+            haz_categ=form.haz.data,
             is_finished=form.is_finished.data
         )
         db_sess.add(job)
@@ -119,6 +128,7 @@ def changej(id):
             form.collaborators.data=jb.collaborators
             form.team_leader.data=jb.team_leader
             form.is_finished.data=jb.is_finished
+            form.haz.data=jb.haz_categ
         else:
             abort(404)
     if form.validate_on_submit():
@@ -126,6 +136,7 @@ def changej(id):
         jb.work_size=form.work_size.data
         jb.collaborators=form.collaborators.data
         jb.team_leader=form.team_leader.data
+        jb.haz_categ=form.haz.data
         jb.is_finished=form.is_finished.data
         db_sess.commit()
         return redirect('/')
@@ -192,6 +203,47 @@ def deleteep(id):
     else:
         abort(404)
     return redirect('/departments')
+
+@app.route('/add_category', methods=['GET', 'POST'])
+def addcat():
+    form = AddCatForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        dp = Category(
+            name=form.name.data
+        )
+        db_sess.add(dp)
+        db_sess.commit()
+        return redirect('/categories')
+    return render_template('add_category.html', title='Adding a category', form=form)
+
+@app.route('/change_category/<int:id>', methods=['GET', 'POST'])
+def changecat(id):
+    form = AddCatForm()
+    db_sess = db_session.create_session()
+    dp = db_sess.query(Category).filter(Category.id == id, (current_user.id == 1)).first()
+    if request.method == "GET":
+        if dp:
+            form.name.data=dp.name
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        dp.name=form.name.data
+        db_sess.commit()
+        return redirect('/categories')
+    return render_template('add_category.html', title='Changing a category', form=form)
+
+@app.route('/delete_category/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deletecat(id):
+    db_sess = db_session.create_session()
+    dp = db_sess.query(Category).filter(Category.id == id, (current_user.id == 1)).first()
+    if dp:
+        db_sess.delete(dp)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/categories')
 
 if __name__ == '__main__':
     app.run(port=5000, host='127.0.0.1')

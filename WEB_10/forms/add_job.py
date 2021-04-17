@@ -9,5 +9,6 @@ class AddForm(FlaskForm):
     team_leader = IntegerField('Team Leader', validators=[DataRequired()])
     work_size = IntegerField('Work Size', validators=[DataRequired()])
     collaborators = StringField('Collaborators')
+    haz = IntegerField('Hazard category')
     is_finished = BooleanField('Is finished?')
     sub = SubmitField('Submit')

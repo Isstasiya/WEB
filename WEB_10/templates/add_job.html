@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>AJob</h1>
+    <h1>Job</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -35,6 +35,15 @@
             {{ form.collaborators.label }}<br>
             {{ form.collaborators(class="form-control") }}<br>
             {% for error in form.collaborators.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.haz.label }}<br>
+            {{ form.haz(class="form-control") }}<br>
+            {% for error in form.haz.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
