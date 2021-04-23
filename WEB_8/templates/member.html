@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <center>
+        {% set member = members["members"]|random %}
+        <h3>{{ member.name.capitalize() }} {{ member.surname.capitalize() }}</h3>
+        <img src="{{ member.photo }}">
+        {% for i in member.speciality.split(", ") %}
+            <p>{{ i }}</p>
+        {% endfor %}
+    </center>
+{% endblock %}

@@ -1,0 +1,22 @@
+{
+    "members":[
+        {
+            "name": "Odry",
+            "surname": "Rose",
+            "photo":"/static/img/Odry.jpg",
+            "speciality": "Doctor, forensic scientist"
+        },
+        {
+            "name": "Tim",
+            "surname": "Ansavi",
+            "photo":"/static/img/Mrak.jpg",
+            "speciality": "Physicist, scientist"
+        },
+        {
+            "name": "Annabet",
+            "surname": "Ceiz",
+            "photo":"/static/img/Aphine.jpg",
+            "speciality": "Architect, tactician, strategist"
+        }
+    ]
+}
