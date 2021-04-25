@@ -20,3 +20,20 @@ print(get('http://localhost:8080/api/v2/users').json())
 print(delete('http://localhost:8080/api/v2/users/5'))
 print(delete('http://localhost:8080/api/v2/users/5')) ## Такого айди нет
 print(get('http://localhost:8080/api/v2/users').json())
+
+
+print(get('http://localhost:8080/api/v2/jobs/1').json())
+print(get('http://localhost:8080/api/v2/jobs/-1').json()) ## Неверний айди
+print(post('http://localhost:8080/api/v2/jobs/', json={"job": "fix the motor",
+                                                       "work_size": 25,
+                                                       "collaborators": "2, 3",
+                                                       "team_leader": 1,
+                                                       "is_finished": False}).json())
+print(post('http://localhost:8080/api/v2/jobs/', json={"job": "fix the motor",
+                                                       "work_size": 25,
+                                                       "collaborators": "2, 3"}).json()) ## не все поля
+print(post('http://localhost:8080/api/v2/jobs/').json()) ## полей нет
+print(get('http://localhost:8080/api/v2/jobs').json())
+print(delete('http://localhost:8080/api/v2/jobs/2'))
+print(delete('http://localhost:8080/api/v2/jobs/5')) ## Такого айди нет
+print(get('http://localhost:8080/api/v2/jobs').json())
