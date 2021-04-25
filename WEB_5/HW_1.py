@@ -22,18 +22,22 @@ if not response:
     raise RuntimeError('Ошибка')
 json_response = response.json()
 organization = json_response["features"][:10]
-org_name = organization["properties"]["CompanyMetaData"]["name"]
-org_address = organization["properties"]["CompanyMetaData"]["address"]
-delta = "0.01"
-org_point = organization["geometry"]["coordinates"]
-s = (float(org_point[0]) - float(address_ll.split(",")[0])) / 2
-k = (float(org_point[1]) - float(address_ll.split(",")[1])) / 2
-jll, spn = find_spn(",".join([str(float(org_point[0]) + s), str(float(org_point[1]) + k)]))
+delta = "0.03"
+pt = []
+for i in organization:
+    hours = i["properties"]["CompanyMetaData"].get("Hours", None)
+    org_point = i["geometry"]["coordinates"]
+    if hours:
+        avail = hours["Availabilities"][0]
+        h24 = avail.get("Everyday", False) and avail.get("TwentyFourHours", False)
+    else:
+        h24 = None
+    pt.append([','.join([str(i) for i in org_point]), h24])
 map_params = {
-    "ll": jll,
-    "spn": spn,
+    "ll": address_ll,
+    "spn": ",".join([delta, delta]),
     "l": "map",
-    "pt": ["{0},pm2dgl~{1},pm2dgl".format(",".join([str(i) for i in org_point]),address_ll)]
+    "pt": "~".join([f'{ps},pm2{"gn" if er else ("lb" if not er else "gr")}l' for ps, er in pt])
 }
 map_api_server = "http://static-maps.yandex.ru/1.x/"
 response = requests.get(map_api_server, params=map_params)
