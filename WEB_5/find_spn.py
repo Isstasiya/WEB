@@ -2,6 +2,7 @@ import requests
 
 def find_spn(address):
     req = f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={address}&format=json"
+    print(req)
     res = requests.get(req)
     if res:
         js = res.json()
