@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <center>
+        <h2>Nostalgy</h2>
+        <h4>{{f["name"]}} {{f["surname"]}}</h4>
+        <h6>Hometown {{f["city_from"]}}</h6>
+        <br>
+        <img src="/{{ mp }}">
+    </center>
+{% endblock %}
